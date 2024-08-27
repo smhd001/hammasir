@@ -1,7 +1,7 @@
 import csv
 from itertools import islice
 
-tags_name = [
+tag_names = [
     "problem",
     "city",
     "expertise",
@@ -14,7 +14,7 @@ tags_name = [
     "moral",
     "user-score",
 ]
-selected_tags_name = [
+selected_tag_names = [
     "problem",
     "city",
     "expertise",
@@ -22,7 +22,7 @@ selected_tags_name = [
 ]
 NOLABEL = "O"
 tags_list = []
-for name in selected_tags_name:
+for name in selected_tag_names:
     tags_list.extend([f"B-{name}", f"I-{name}"])
 tags_list.append(NOLABEL)
 

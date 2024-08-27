@@ -8,7 +8,7 @@ if module_path not in sys.path:
 from read_data import batched, filter_tags, get_row_len  # noqa: E402
 
 
-def tsv_to_list(text):
+def tsv_to_list(text) -> list:
     data = []
     for i, (tokens, labels) in enumerate(batched(text.split("\n"), 2)):
         tokens = tokens.split()
@@ -26,7 +26,7 @@ def tsv_to_list(text):
     return data
 
 
-def conll_to_list(text):
+def conll_to_list(text) -> list:
     data = []
     for i, row in enumerate(text.split("\n\n")):
         tokens = []
@@ -47,15 +47,15 @@ def conll_to_list(text):
     return data
 
 
-def conll_to_tsv(text, sep=" "):
+def conll_to_tsv(text, sep="\t") -> str:
     ll = conll_to_list(text)
     result = ""
     for row in ll:
-        result += "\t".join(row["tokens"]) + "\n" + "\t".join(row["tags"]) + "\n"
+        result += sep.join(row["tokens"]) + "\n" + sep.join(row["tags"]) + "\n"
     return result
 
 
-def tsv_to_conll(text, sep=" "):
+def tsv_to_conll(text, sep=" ") -> str:
     ll = tsv_to_list(text)
     result = ""
     for row in ll:
