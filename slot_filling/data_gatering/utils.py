@@ -1,0 +1,69 @@
+import os
+import sys
+
+module_path = os.path.abspath(os.path.join(".."))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+from read_data import batched, filter_tags, get_row_len  # noqa: E402
+
+
+def tsv_to_list(text):
+    data = []
+    for i, (tokens, labels) in enumerate(batched(text.split("\n"), 2)):
+        tokens = tokens.split()
+        labels = labels.split()
+        row_len = get_row_len(tokens)
+        if row_len == 0:
+            break
+        data.append(
+            {
+                "id": i,
+                "tokens": tokens[:row_len],
+                "tags": filter_tags(labels[:row_len]),
+            }
+        )
+    return data
+
+
+def conll_to_list(text):
+    data = []
+    for i, row in enumerate(text.split("\n\n")):
+        tokens = []
+        labels = []
+        for line in row.split("\n"):
+            if len(line) == 0:
+                break
+            token, label = line.split()
+            tokens.append(token)
+            labels.append(label)
+        data.append(
+            {
+                "id": i,
+                "tokens": tokens,
+                "tags": labels,
+            }
+        )
+    return data
+
+
+def conll_to_tsv(text, sep=" "):
+    l = conll_to_list(text)
+    result = ""
+    for row in l:
+        result += "\t".join(row["tokens"]) + "\n" + "\t".join(row["tags"]) + "\n"
+    return result
+
+
+def tsv_to_conll(text, sep=" "):
+    l = tsv_to_list(text)
+    result = ""
+    for row in l:
+        result += "\n".join(
+            [
+                f"{row['tokens'][i]}{sep}{row['tags'][i]}"
+                for i in range(len(row["tokens"]))
+            ]
+        )
+        result += "\n\n"
+    return result

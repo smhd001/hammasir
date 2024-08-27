@@ -1,0 +1,70 @@
+import csv
+from itertools import islice
+
+tags_name = [
+    "problem",
+    "city",
+    "expertise",
+    "gender",
+    "neighborhood",
+    "online-or-in-person",
+    "insurance",
+    "first-available-appointment",
+    "amount-of-delay",
+    "moral",
+    "user-score",
+]
+selected_tags_name = [
+    "problem",
+    "city",
+    "expertise",
+    "gender",
+]
+NOLABEL = "O"
+tags_list = []
+for name in selected_tags_name:
+    tags_list.extend([f"B-{name}", f"I-{name}"])
+tags_list.append(NOLABEL)
+
+
+def batched(iterable, n):
+    """batched('ABCDEFG', 3) → ABC DEF G"""
+    if n < 1:
+        raise ValueError("n must be at least one")
+    iterator = iter(iterable)
+    while batch := tuple(islice(iterator, n)):
+        yield batch
+
+
+def get_row_len(row):
+    i = 0
+    for t in row:
+        if t == "":
+            break
+        i += 1
+    return i
+
+
+def filter_tags(labels):
+    for i in range(len(labels)):
+        if labels[i] not in tags_list:
+            labels[i] = NOLABEL
+    return labels
+
+
+def read_data(file_path: str) -> dict:
+    data = []
+    with open(file_path, newline="") as csvfile:
+        spamreader = csv.reader(csvfile)
+        for i, (tokens, labels) in enumerate(batched(spamreader, 2)):
+            row_len = get_row_len(tokens)
+            if row_len == 0:
+                break
+            data.append(
+                {
+                    "id": i,
+                    "tokens": tokens[:row_len],
+                    "tags": filter_tags(labels[:row_len]),
+                }
+            )
+    return data
