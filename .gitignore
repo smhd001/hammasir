@@ -1,4 +1,6 @@
 test.ipynb
+slot_filling/traininng/data
+slot_filling/traininng/ner_model
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
