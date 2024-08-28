@@ -11,8 +11,6 @@ if module_path not in sys.path:
     sys.path.append(module_path)
 
 from read_data import all_tags_list  # noqa: E402
-from utils import conll_to_tsv
-
 
 def sample_sentence_from_file(file_path: str, n) -> list[str]:
     with open(file_path, "r") as file:

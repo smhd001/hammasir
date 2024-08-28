@@ -8,12 +8,12 @@
 دکتر O
 در O
 محله O
-صیاد O
+صیاد B-neighborhood
 پیشنهاد O
 بده O
 که O
 امتیازش O
-بالا O
+بالا B-user-score
 باشه O
 
 یه O
@@ -25,12 +25,12 @@
 کن O
 که O
 بیمه O
-ارتش O
+ارتش B-insurance
 رو O
 قبول O
 کنه O
 و O
-سریع O
+سریع B-first-available-appointment
 نوبت O
 بده O
 
@@ -40,10 +40,22 @@
 آندوسکوپی B-expertise
 انجام O
 بده O
-در O
-مشهد B-city
-تو O
 و O
+تو O
 مطبش O
-معطل O
-نشم O
+معطل B-amount-of-daley
+نشم I-amount-of-daley
+
+دکتر O
+متخصص O
+اعصاب B-expertise
+با O
+حوصله B-moral
+خوب I-moral
+که O
+مرد B-gender
+باشه O
+و O
+آنلاین B-in-person-or-online
+ویزیت O
+کنه O
