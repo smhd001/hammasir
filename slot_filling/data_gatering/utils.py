@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 module_path = os.path.abspath(os.path.join(".."))
@@ -67,3 +68,7 @@ def tsv_to_conll(text, sep=" ") -> str:
         )
         result += "\n\n"
     return result
+
+
+def split_to_token(text: str) -> list:
+    return re.split(r"[\b\W\b]+", text)

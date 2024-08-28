@@ -73,3 +73,11 @@ def read_data(file_path: str) -> dict:
                 }
             )
     return data
+
+
+def print_data(data: list[dict]) -> None:
+    max_token_len = 30
+    for row in data:
+        print(row["id"])
+        print(" ".join(r.rjust(max_token_len) for r in row["tokens"]))
+        print(" ".join(r.rjust(max_token_len) for r in row["tags"]))

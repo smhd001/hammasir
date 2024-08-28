@@ -11,6 +11,7 @@ if module_path not in sys.path:
     sys.path.append(module_path)
 
 from read_data import all_tags_list  # noqa: E402
+from utils import conll_to_tsv
 
 
 def sample_sentence_from_file(file_path: str, n) -> list[str]:
@@ -89,7 +90,10 @@ def generate_labeling(files: list[str] | None = None):
                 )
             )
             generation_config = config.LABELING_GENERATION_CONFIG
-            result += chat(prompt, generation_config) + "\n"
+            response = chat(prompt, generation_config)
+            if response[-1] != "\n":
+                response += "\n"
+            result += response
         with open(
             config.LABELING_DIR_PATH + "/gpt/" + f,
             "w",
