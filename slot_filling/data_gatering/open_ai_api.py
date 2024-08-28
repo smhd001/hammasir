@@ -60,7 +60,7 @@ def generate_sentence(n):
     used_example_path = config.SENTENCE_EXAMPLE_FILE_PATH.split("/")[-1]
     with open(
         config.SENTENCE_GENERATED_DIR_PATH
-        + "/"
+        + "/gpt/"
         + f"{used_example_path}_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt",
         "w",
     ) as file:
@@ -69,12 +69,12 @@ def generate_sentence(n):
 
 def generate_labeling(files: list[str] | None = None):
     if files is None:
-        files = os.listdir(config.SENTENCE_GENERATED_DIR_PATH)
-        annotated_files = os.listdir(config.LABELING_DIR_PATH)
+        files = os.listdir(config.SENTENCE_GENERATED_DIR_PATH + "/gpt")
+        annotated_files = os.listdir(config.LABELING_DIR_PATH + "/gpt")
         files = list(set(files) - set(annotated_files))
     for f in files:
         sentences = []
-        with open(config.SENTENCE_GENERATED_DIR_PATH + "/" + f, "r") as file:
+        with open(config.SENTENCE_GENERATED_DIR_PATH + "/gpt/" + f, "r") as file:
             sentences += file.readlines()
         # filter out empty lines
         sentences = [s.strip() for s in sentences if s.strip()]
@@ -91,7 +91,7 @@ def generate_labeling(files: list[str] | None = None):
             generation_config = config.LABELING_GENERATION_CONFIG
             result += chat(prompt, generation_config) + "\n"
         with open(
-            config.LABELING_DIR_PATH + "/" + f,
+            config.LABELING_DIR_PATH + "/gpt/" + f,
             "w",
         ) as file:
             file.write(result)

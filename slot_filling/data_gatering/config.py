@@ -14,16 +14,15 @@ SENTENCE_EXAMPLE_FILE_PATH = path.join(
     "human",
     "v1.txt",
 )
-SENTENCE_GENERATED_DIR_PATH = path.join(
-    path.dirname(__file__), "data", "sentences", "gpt"
-)
+SENTENCE_GENERATED_DIR_PATH = path.join(path.dirname(__file__), "data", "sentences")
 
 LABELING_PROMPT_PATH = path.join(path.dirname(__file__), "prompts", "labeling.txt")
 LABELLING_EXAMPLES_FILE_PATH = path.join(
     path.dirname(__file__), "prompts", "labeling_examples.txt"
 )
-LABELING_DIR_PATH = path.join(path.dirname(__file__), "data", "ladeled", "gpt")
+LABELING_DIR_PATH = path.join(path.dirname(__file__), "data", "ladeled")
 
+MERGED_FILE_PATH = path.join(path.dirname(__file__), "data", "merged.csv")
 SENTENCE_GENERATION_CONFIG = {
     "max_tokens": 10000,
     "temperature": 0.7,  # higher temperature for more randomness
