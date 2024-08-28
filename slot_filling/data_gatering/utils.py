@@ -5,7 +5,7 @@ module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-from read_data import batched, filter_tags, get_row_len  # noqa: E402
+from read_data import batched, fill_and_filter_tags, get_tokens_row_len  # noqa: E402
 
 
 def tsv_to_list(text) -> list:
@@ -13,14 +13,14 @@ def tsv_to_list(text) -> list:
     for i, (tokens, labels) in enumerate(batched(text.split("\n"), 2)):
         tokens = tokens.split()
         labels = labels.split()
-        row_len = get_row_len(tokens)
+        row_len = get_tokens_row_len(tokens)
         if row_len == 0:
             break
         data.append(
             {
                 "id": i,
                 "tokens": tokens[:row_len],
-                "tags": filter_tags(labels[:row_len]),
+                "tags": fill_and_filter_tags(labels[:row_len]),
             }
         )
     return data

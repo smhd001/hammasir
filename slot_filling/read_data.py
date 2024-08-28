@@ -1,7 +1,7 @@
 import csv
 from itertools import islice
 
-tag_names = [
+all_tag_names = [
     "problem",
     "city",
     "expertise",
@@ -26,6 +26,11 @@ for name in selected_tag_names:
     tags_list.extend([f"B-{name}", f"I-{name}"])
 tags_list.append(NOLABEL)
 
+all_tags_list = []
+for name in selected_tag_names:
+    all_tags_list.extend([f"B-{name}", f"I-{name}"])
+all_tags_list.append(NOLABEL)
+
 
 def batched(iterable, n):
     """batched('ABCDEFG', 3) → ABC DEF G"""
@@ -36,7 +41,7 @@ def batched(iterable, n):
         yield batch
 
 
-def get_row_len(row):
+def get_tokens_row_len(row):
     i = 0
     for t in row:
         if t == "":
@@ -45,7 +50,7 @@ def get_row_len(row):
     return i
 
 
-def filter_tags(labels):
+def fill_and_filter_tags(labels):
     for i in range(len(labels)):
         if labels[i] not in tags_list:
             labels[i] = NOLABEL
@@ -57,14 +62,14 @@ def read_data(file_path: str) -> dict:
     with open(file_path, newline="") as csvfile:
         spamreader = csv.reader(csvfile)
         for i, (tokens, labels) in enumerate(batched(spamreader, 2)):
-            row_len = get_row_len(tokens)
+            row_len = get_tokens_row_len(tokens)
             if row_len == 0:
                 break
             data.append(
                 {
                     "id": i,
                     "tokens": tokens[:row_len],
-                    "tags": filter_tags(labels[:row_len]),
+                    "tags": fill_and_filter_tags(labels[:row_len]),
                 }
             )
     return data
