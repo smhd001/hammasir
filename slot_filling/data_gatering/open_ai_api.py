@@ -1,3 +1,4 @@
+import enum
 import os
 import sys
 from datetime import datetime
@@ -11,6 +12,7 @@ if module_path not in sys.path:
     sys.path.append(module_path)
 
 from read_data import all_tags_list  # noqa: E402
+
 
 def sample_sentence_from_file(file_path: str, n) -> list[str]:
     with open(file_path, "r") as file:
@@ -36,7 +38,20 @@ def get_labeling_prompt(sentences: str) -> str:
     return prompt.format(tags=all_tags_list, examples=examples, sentences=sentences)
 
 
-def chat(prompt: str, generation_config):
+ChatMethod = enum.Enum("ChatMethod", ["api", "ui", "selenium"])
+
+
+def chat_ui(prompt: str, generation_config) -> str:
+    """copy to chat and paste response here"""
+    print(prompt)
+    return input("Response: ")
+
+
+def chat_selenium(prompt: str, generation_config) -> str:
+    pass
+
+
+def chat_aip(prompt: str, generation_config) -> str:
     response = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[
@@ -46,6 +61,20 @@ def chat(prompt: str, generation_config):
         **generation_config,
     )
     return response.choices[0].message["content"]
+
+
+def chat(
+    prompt: str, generation_config, chat_method: ChatMethod = ChatMethod.api
+) -> str:
+    match chat_method:
+        case ChatMethod.api:
+            return chat_aip(prompt, generation_config)
+        case ChatMethod.ui:
+            return chat_ui(prompt, generation_config)
+        case ChatMethod.selenium:
+            return chat_selenium(prompt, generation_config)
+        case _:
+            raise ValueError("Invalid ChatMethod")
 
 
 def generate_sentence(n):
