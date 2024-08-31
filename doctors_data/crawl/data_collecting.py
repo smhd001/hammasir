@@ -1,4 +1,5 @@
 import json
+
 import requests
 from bs4 import BeautifulSoup
 
@@ -60,4 +61,3 @@ get_all_data(city_list, expertise_list)
 
 with open("doctors.json", "w", encoding="utf-8") as file:
     json.dump(doctors_data, file, ensure_ascii=False, indent=4)
-
