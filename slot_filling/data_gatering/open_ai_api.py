@@ -140,5 +140,5 @@ def generate_labeling(files: list[str] | None = None):
 
 
 if __name__ == "__main__":
-    generate_sentence(10)
+    generate_sentence(110)
     generate_labeling()

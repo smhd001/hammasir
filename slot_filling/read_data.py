@@ -28,7 +28,7 @@ for name in selected_tag_names:
 tags_list.append(NOLABEL)
 
 all_tags_list = []
-for name in selected_tag_names:
+for name in all_tag_names:
     all_tags_list.extend([f"B-{name}", f"I-{name}"])
 all_tags_list.append(NOLABEL)
 
