@@ -4,7 +4,6 @@ import sys
 from datetime import datetime
 from random import sample
 
-import openai
 
 import config
 
@@ -63,6 +62,7 @@ def chat_selenium(prompt: str, generation_config) -> str:
 
 
 def chat_aip(prompt: str, generation_config) -> str:
+    import openai
     response = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[
