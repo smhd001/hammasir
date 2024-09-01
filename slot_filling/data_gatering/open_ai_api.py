@@ -4,15 +4,14 @@ import sys
 from datetime import datetime
 from random import sample
 
-
 import config
 
 module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-from read_data import all_tags_list  # noqa: E402
 from preprocessing import gpt_sentence_generated_postprocessing  # noqa: E402
+from read_data import all_tags_list  # noqa: E402
 
 
 def sample_sentence_from_file(file_path: str, n) -> list[str]:
@@ -63,6 +62,7 @@ def chat_selenium(prompt: str, generation_config) -> str:
 
 def chat_aip(prompt: str, generation_config) -> str:
     import openai
+
     response = openai.ChatCompletion.create(
         model="gpt-4o",
         messages=[
