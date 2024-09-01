@@ -7,12 +7,11 @@ NUM_LABELING_SENTENCES = 5
 SENTENCE_GENERATION_PROMPT_PATH = path.join(
     path.dirname(__file__), "prompts", "sentence_generation.txt"
 )
-SENTENCE_EXAMPLE_FILE_PATH = path.join(
+SENTENCE_EXAMPLE_DIR = path.join(
     path.dirname(__file__),
     "data",
     "sentences",
     "human",
-    "v1.txt",
 )
 SENTENCE_GENERATED_DIR_PATH = path.join(path.dirname(__file__), "data", "sentences")
 

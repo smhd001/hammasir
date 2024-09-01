@@ -61,8 +61,8 @@ def fill_and_filter_tags(labels):
 def read_data(file_path: str) -> dict:
     data = []
     with open(file_path, newline="") as csvfile:
-        spamreader = csv.reader(csvfile)
-        for i, (tokens, labels) in enumerate(batched(spamreader, 2)):
+        csv_reader = csv.reader(csvfile)
+        for i, (tokens, labels) in enumerate(batched(csv_reader, 2)):
             row_len = get_tokens_row_len(tokens)
             if row_len == 0:
                 break

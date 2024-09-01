@@ -4,24 +4,29 @@ import sys
 from datetime import datetime
 from random import sample
 
-import config
 import openai
+
+import config
 
 module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
 from read_data import all_tags_list  # noqa: E402
+from preprocessing import gpt_sentence_generated_postprocessing  # noqa: E402
 
 
 def sample_sentence_from_file(file_path: str, n) -> list[str]:
-    with open(file_path, "r") as file:
+    sentences = ""
+    with open(file_path + "/team.txt", "r") as file:
         sentences = file.readlines()
+    with open(file_path + "/human.txt", "r") as file:
+        sentences += file.readlines()
     return sample(sentences, n)
 
 
 def sample_sentence(n) -> str:
-    return "".join(sample_sentence_from_file(config.SENTENCE_EXAMPLE_FILE_PATH, n))
+    return "".join(sample_sentence_from_file(config.SENTENCE_EXAMPLE_DIR, n))
 
 
 def get_sentence_generation_prompt() -> str:
@@ -44,7 +49,13 @@ ChatMethod = enum.Enum("ChatMethod", ["api", "ui", "selenium"])
 def chat_ui(prompt: str, generation_config) -> str:
     """copy to chat and paste response here"""
     print(prompt)
-    return input("Response: ")
+    result = ""
+    while True:
+        response = input()
+        if response == "e":
+            break
+        result += response + "\n"
+    return result
 
 
 def chat_selenium(prompt: str, generation_config) -> str:
@@ -84,12 +95,12 @@ def generate_sentence(n):
         prompt = get_sentence_generation_prompt()
         response = chat(prompt, generation_config)
         result += response + "\n"
+    result = gpt_sentence_generated_postprocessing(result)
     # save generated sentences
-    used_example_path = config.SENTENCE_EXAMPLE_FILE_PATH.split("/")[-1]
     with open(
         config.SENTENCE_GENERATED_DIR_PATH
         + "/gpt/"
-        + f"{used_example_path}_{datetime.now().strftime('%Y%m%d%H%M%S')}.txt",
+        + f"{datetime.now().strftime('%Y%m%d%H%M%S')}.txt",
         "w",
     ) as file:
         file.write(result)
@@ -129,5 +140,5 @@ def generate_labeling(files: list[str] | None = None):
 
 
 if __name__ == "__main__":
-    generate_sentence(50)
+    generate_sentence(10)
     generate_labeling()
