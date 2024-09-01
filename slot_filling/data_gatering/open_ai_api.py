@@ -64,7 +64,7 @@ def chat_aip(prompt: str, generation_config) -> str:
 
 
 def chat(
-    prompt: str, generation_config, chat_method: ChatMethod = ChatMethod.api
+    prompt: str, generation_config, chat_method: ChatMethod = ChatMethod.ui
 ) -> str:
     match chat_method:
         case ChatMethod.api:
@@ -126,3 +126,8 @@ def generate_labeling(files: list[str] | None = None):
             "w",
         ) as file:
             file.write(result)
+
+
+if __name__ == "__main__":
+    generate_sentence(50)
+    generate_labeling()
