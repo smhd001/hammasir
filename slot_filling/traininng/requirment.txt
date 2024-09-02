@@ -2,6 +2,3 @@ transformers[torch]
 datasets
 evaluate
 seqeval
-onnx
-onnxscript
-pip install optimum[onnxruntime-gpu]

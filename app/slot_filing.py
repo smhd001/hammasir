@@ -2,7 +2,7 @@ from optimum.onnxruntime import ORTModelForTokenClassification
 from transformers import AutoTokenizer, pipeline
 
 model = ORTModelForTokenClassification.from_pretrained(
-    "/home/ham/hammasir/hammasir/slot_filling/traininng/ner_model/checkpoint-40",
+    "../slot_filling/traininng/ner_model/checkpoint-40",
     export=True,
     provider="CUDAExecutionProvider",
     from_transformers=True,
@@ -14,7 +14,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 classifier = pipeline("ner", model=model, tokenizer=tokenizer,device="cuda")
 
 
-def slot_fiiling(text) -> dict[str, str]:
+def slot_filing(text) -> dict[str, str]:
     output = classifier(text)
     result = {}
     word = ""
