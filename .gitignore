@@ -1,6 +1,7 @@
 test.ipynb
 slot_filling/traininng/data
 slot_filling/traininng/ner_model
+docotrs_data/data/raw/doctors.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
