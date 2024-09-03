@@ -4,7 +4,7 @@ from transformers import AutoTokenizer, pipeline
 model = ORTModelForTokenClassification.from_pretrained(
     "../slot_filling/traininng/ner_model/checkpoint-77",
     export=True,
-    provider="CUDAExecutionProvider",
+    provider="TensorrtExecutionProvider",
     from_transformers=True,
 )
 
