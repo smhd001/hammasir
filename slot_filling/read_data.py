@@ -21,6 +21,7 @@ selected_tag_names = [
     "expertise",
     "gender",
 ]
+selected_tag_names = all_tag_names
 NOLABEL = "O"
 tags_list = []
 for name in selected_tag_names:

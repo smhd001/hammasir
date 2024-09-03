@@ -10,10 +10,10 @@ from datasets import (
     Sequence,
     Value,
 )
-
 from transformers import AutoTokenizer
 from transformers import AutoModelForTokenClassification
-
+import evaluate
+import numpy as np
 
 module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
@@ -77,19 +77,14 @@ def get_dataset(file_path, tokenizer, test_size=0.2) -> DatasetDict:
         ),
         split=NamedSplit("train"),
     )
-    sample.train_test_split(test_size=test_size)
+    sample = sample.train_test_split(test_size=test_size)
     tokenized_data = sample.map(
         tokenize_and_align_labels, batched=True, fn_kwargs={"tokenizer": tokenizer}
     )
     return tokenized_data
 
 
-import numpy as np
-
-import evaluate
-
 seqeval = evaluate.load("seqeval")
-
 
 def compute_metrics(p):
     predictions, labels = p

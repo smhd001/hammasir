@@ -11,18 +11,19 @@ def merge_data():
         files[source] = [
             config.LABELING_DIR_PATH + "/" + source + "/" + file for file in dir_file
         ]
-    for file in files["human"]:
-        data = open(file, "r").read()
-        if data[-1] != "\n":
-            data += "\n"
-        open(config.MERGED_FILE_PATH, "a").write(data)
+    with open(config.MERGED_FILE_PATH, "w") as f:
+        for file in files["human"]:
+            data = open(file, "r").read()
+            if data[-1] != "\n":
+                data += "\n"
+            f.write(data)
 
-    for file in files["gpt"]:
-        data = open(file, "r").read()
-        if data[-1] != "\n":
-            data += "\n"
-        conll = open(file, "r").read()
-        open(config.MERGED_FILE_PATH, "a").write(conll_to_tsv(conll, sep=","))
+        for file in files["gpt"]:
+            data = open(file, "r").read()
+            if data[-1] != "\n":
+                data += "\n"
+            conll = open(file, "r").read()
+            f.write(conll_to_tsv(conll, sep=","))
 
 
 if __name__ == "__main__":

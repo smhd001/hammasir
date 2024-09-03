@@ -33,6 +33,7 @@ def conll_to_list(text) -> list:
         tokens = []
         labels = []
         for line in row.split("\n"):
+            line = line.strip()
             if len(line) == 0:
                 break
             token, label = line.split()
