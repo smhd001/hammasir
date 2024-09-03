@@ -227,7 +227,7 @@
 باشه O  
 . O  
 
-بهترین O  
+بهترین B-user-score 
 دکتر O  
 متخصص O 
 اعصاب B-expertise  
@@ -867,7 +867,7 @@
 قبول O  
 کنه O  
 . O 
- 
+
 من O  
 چشمام B-problem  
 همیشه O  
@@ -1110,7 +1110,7 @@
 کنه O  
 . O  
 
-بهترین O  
+بهترین B-user-score  
 دکتر O  
 برای O  
 درمان O
@@ -1354,7 +1354,7 @@
 داشته O  
 باشه O  
 . O 
- 
+
 یه O  
 روانشناس B-expertise  
 خوب B-user-score
@@ -1380,7 +1380,7 @@
 فوری O  
 دارم O  
 . O 
- 
+
 به O  
 یک O  
 ارتوپد B-expertise  
@@ -1400,10 +1400,8 @@
 بده O  
 و O  
 بیمه O
-تأمین B-insurance  
-اجتماعی I-insurance  
+آسیا B-insurance  
 رو O  
-هم O  
 قبول O  
 کنه O  
 . O  
@@ -1604,7 +1602,7 @@
 باشه O  
 . O  
 
- پزشک O  
+پزشک O  
 خوب B-user-score
 گوارش B-expertise  
 در O  
@@ -1993,10 +1991,7 @@
 بده O  
 و O  
 بیمه O
-تأمین B-insurance  
-اجتماعی I-insurance  
-رو O  
-هم O  
+سلامت B-insurance  
 قبول O  
 کنه O  
 . O  
@@ -2089,7 +2084,7 @@
 که O  
 نتایج O  
 رو O  
-بررسی I-problem
+بررسی O
 کنه O  
 و O  
 هزینه O  
@@ -2192,7 +2187,7 @@
 کم O
 باشه O  
 . O
-  
+
 برای O  
 زخم B-problem  
 معده I-problem  
