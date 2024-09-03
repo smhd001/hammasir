@@ -2,16 +2,16 @@ from optimum.onnxruntime import ORTModelForTokenClassification
 from transformers import AutoTokenizer, pipeline
 
 model = ORTModelForTokenClassification.from_pretrained(
-    "../slot_filling/traininng/ner_model/checkpoint-40",
+    "../slot_filling/traininng/ner_model/checkpoint-77",
     export=True,
-    provider="CUDAExecutionProvider",
+    provider="TensorrtExecutionProvider",
     from_transformers=True,
 )
 
 
 model_id = "HooshvareLab/bert-base-parsbert-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
-classifier = pipeline("ner", model=model, tokenizer=tokenizer,device="cuda")
+classifier = pipeline("ner", model=model, tokenizer=tokenizer, device="cuda")
 
 
 def slot_filing(text) -> dict[str, str]:

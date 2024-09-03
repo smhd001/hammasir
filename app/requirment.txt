@@ -3,3 +3,4 @@ onnxscript
 optimum[onnxruntime-gpu]
 streamlit
 streamlit_mic_recorder
+elasticsearch
