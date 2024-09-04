@@ -1,6 +1,12 @@
-import json
-from elasticsearch import Elasticsearch
+import os
+import sys
 
+module_path = os.path.abspath(os.path.join(".."))
+if module_path not in sys.path:
+    sys.path.append(module_path)
+
+from elasticsearch import Elasticsearch
+from query_config import query_config
 
 # # Connect to Elasticsearch
 # es = Elasticsearch(
@@ -12,13 +18,16 @@ from elasticsearch import Elasticsearch
 # print(es.info())
 
 
-def search(slots) -> str:
-    result = dummy_query(slots)
+def search(search_params) -> list[str]:
+    result = dummy_query(search_params)
+    # final_query = build_query(search_params, query_config)
+    # result = es.search(index="doctors", body={"query": final_query})
     return format_result(result)
 
 
-def query(search_params, index_name="doctors"):
+def build_query(search_params, config=query_config):
     query = {"bool": {"must": [], "should": [], "filter": []}}
+
     for field in ["problem", "expertise"]:
         if field in search_params:
             query["bool"]["should"].extend(
@@ -32,9 +41,34 @@ def query(search_params, index_name="doctors"):
 
     if "gender" in search_params:
         query["bool"]["filter"].append({"term": {"gender": search_params["gender"][0]}})
-    print(query)
 
-    return es.search(index=index_name, body={"query": query})
+    final_query = {
+        "function_score": {
+            "query": query,
+            "functions": [
+                {
+                    "field_value_factor": {
+                        "field": "star",
+                        "factor": config["factors"]["star"],
+                        "modifier": "none",
+                        "missing": 0,
+                    }
+                },
+                {
+                    "field_value_factor": {
+                        "field": "star",
+                        "factor": config["factors"]["star"],
+                        "modifier": "none",
+                        "missing": 0,
+                    }
+                },
+            ],
+            "boost_mode": "sum",
+            "score_mode": "sum",
+        }
+    }
+
+    return final_query
 
 
 def dummy_query(text):
@@ -43,14 +77,13 @@ def dummy_query(text):
     # fmt: on
 
 
-def format_result(result) -> str:
-    formated_result = []
+def format_result(result) -> list[str]:
+    formatted_result = []
     for hits in result["hits"]["hits"]:
         name = hits["_source"]["title"]
         expertise = hits["_source"]["expertise"]
         url = hits["_source"]["url"]
         titel = name + "\n\n" + expertise
-        # description = json.dumps(hits["_source"], indent=2, ensure_ascii=False)
         description = hits["_source"]
-        formated_result.append((titel, url, description))
-    return formated_result
+        formatted_result.append((titel, url, description))
+    return formatted_result
