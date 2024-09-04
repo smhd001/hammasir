@@ -1,6 +1,8 @@
 import os
 import sys
 
+import evaluate
+import numpy as np
 from datasets import (
     ClassLabel,
     Dataset,
@@ -10,10 +12,7 @@ from datasets import (
     Sequence,
     Value,
 )
-from transformers import AutoTokenizer
-from transformers import AutoModelForTokenClassification
-import evaluate
-import numpy as np
+from transformers import AutoModelForTokenClassification, AutoTokenizer
 
 module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:

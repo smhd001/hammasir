@@ -1,8 +1,9 @@
+import config
 import streamlit as st
 import streamlit.components.v1 as components
-import config
-from streamlit_mic_recorder import speech_to_text
 from elastic_query import search
+from streamlit_mic_recorder import speech_to_text
+
 # from slot_filing import slot_filing
 
 state = st.session_state

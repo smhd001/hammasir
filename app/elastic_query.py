@@ -5,8 +5,8 @@ module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
     sys.path.append(module_path)
 
-from elasticsearch import Elasticsearch
-from query_config import query_config
+from elasticsearch import Elasticsearch  # noqa: E402, F401
+from query_config import query_config  # noqa: E402
 
 # # Connect to Elasticsearch
 # es = Elasticsearch(
@@ -56,8 +56,8 @@ def build_query(search_params, config=query_config):
                 },
                 {
                     "field_value_factor": {
-                        "field": "star",
-                        "factor": config["factors"]["star"],
+                        "field": "rating",
+                        "factor": config["factors"]["rating"],
                         "modifier": "none",
                         "missing": 0,
                     }
