@@ -1,7 +1,5 @@
 import ast
-import json
 from copy import deepcopy
-from pkgutil import get_data
 
 import numpy as np
 import pandas as pd
@@ -45,6 +43,9 @@ mappings = {
         "comments_count": {"type": "integer"},
         "waiting_time": {"type": "float"},
         "clinic": {"type": "object"},
+        "about": {
+            "type": "text",
+        },
     }
 }
 
@@ -146,14 +147,17 @@ def index(
         es.index(index="doctors", id=i, document=doc)
 
 
-def get_dat(path):
-    data = pd.read_csv(path)
+def get_data(path):
+    data = pd.read_csv(path + "base_dataset.csv")
+    about = pd.read_csv(path + "about_dataset.csv")
     data["clinic"] = data["clinic"].apply(safe_literal_eval)
     # data["insurances"] = data["insurances"].apply(safe_literal_eval) TODO
     data = data.replace(np.nan, None)
+    about = about.replace(np.nan, None)
+    data["about"] = about["about"]
     return data
 
 
 if __name__ == "__main__":
-    data = get_data("../data/processed/base_dataset.csv")
+    data = get_data("../data/processed/")
     index(data)
