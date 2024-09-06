@@ -59,7 +59,7 @@ def fill_and_filter_tags(labels):
     return labels
 
 
-def read_data(file_path: str) -> dict:
+def read_data(file_path: str) -> list:
     data = []
     with open(file_path, newline="") as csvfile:
         csv_reader = csv.reader(csvfile)

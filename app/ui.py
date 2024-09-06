@@ -1,9 +1,8 @@
 import config
 import streamlit as st
 from elastic_query import search
-from streamlit_mic_recorder import speech_to_text
-
 from slot_filing import slot_filing
+from streamlit_mic_recorder import speech_to_text
 
 state = st.session_state
 
@@ -72,5 +71,7 @@ for res in state.search_result:
                 f"[مشاهده در پزشک 24]({p24_url})"
                 if lat_long:
                     lat, long = lat_long
-                    neshan_url = config.NESHAN_BASE_URL + "/" + str(lat) + "," + str(long)
+                    neshan_url = (
+                        config.NESHAN_BASE_URL + "/" + str(lat) + "," + str(long)
+                    )
                     f"[مسیر یابی در نشان]({neshan_url})"

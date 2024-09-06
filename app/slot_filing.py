@@ -1,4 +1,5 @@
 import os
+
 from optimum.onnxruntime import ORTModelForTokenClassification
 from transformers import AutoTokenizer, pipeline
 
@@ -17,6 +18,7 @@ model = ORTModelForTokenClassification.from_pretrained(
 model_id = "HooshvareLab/bert-base-parsbert-uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_id)
 classifier = pipeline("ner", model=model, tokenizer=tokenizer, device="cuda")
+
 
 def slot_filing(text) -> dict[str, str]:
     output = classifier(text)
