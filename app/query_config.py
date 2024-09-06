@@ -1,5 +1,5 @@
 query_config = {
-    "function_scores": {
+    "function_score": {
         "user-score": {
             "field_value_factor": {
                 "field": "star",
@@ -31,7 +31,6 @@ query_config = {
                     "scale": 1,
                     "offset": 0.5,
                     "decay": 0.5,
-                    "missing": 4,
                 }
             }
         },
@@ -42,10 +41,12 @@ query_config = {
                     "scale": "1d",
                     "offset": "0d",
                     "decay": 0.5,
-                    "missing": 10,
                 }
             }
         },
     },
-    "gender_map": {"F": ["خانم", "زن", "مونث", "دختر"], "M": ["آقا", "مرد", "مذکر", "پسر"]},
+    "gender_map": {
+        "F": ["خانم", "زن", "مونث", "دختر"],
+        "M": ["آقا", "مرد", "مذکر", "پسر"],
+    },
 }

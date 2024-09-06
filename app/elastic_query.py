@@ -1,6 +1,6 @@
-from copy import deepcopy
 import os
 import sys
+from copy import deepcopy
 
 module_path = os.path.abspath(os.path.join(".."))
 if module_path not in sys.path:
@@ -30,15 +30,17 @@ def search(search_params) -> list[str]:
 def configure_query(search_params, default_config):
     config = deepcopy(default_config)
     function_scores = {}
-    for f_score, v in config["function_scores"].items():
+    for f_score, v in config["function_score"].items():
         if f_score in search_params:
             function_scores[f_score] = v
-    config["function_scores"] = function_scores
+    config["function_score"] = function_scores
     # map gender
-    for gender, g_terms in config["gender_map"].value():
-        for g_term in g_terms:
-            if g_term in search_params["gender"][0]:
-                search_params["gender"][0] = gender
+    if "gender" in search_params:
+        for gender, g_terms in config["gender_map"].items():
+            for g_term in g_terms:
+                if g_term in search_params["gender"][0]:
+                    search_params["gender"][0] = gender
+    return config
 
 
 def build_query(search_params, config=query_config):
@@ -50,25 +52,28 @@ def build_query(search_params, config=query_config):
                 [{"match": {"expertise": e}} for e in search_params[field]]
             )
 
-    query["bool"]["should"].extend(
-        [{"match": {"neighborhood": e}} for e in search_params["neighborhood"]]
-    )
+    if "neighborhood" in search_params:
+        query["bool"]["should"].extend(
+            [{"match": {"clinic.address": e}} for e in search_params["neighborhood"]]
+        )
 
     if "city" in search_params:
         query["bool"]["filter"].append(
             {"term": {"clinic.city": search_params["city"][0]}}
         )
+
+    if "insurance" in search_params:
+        query["bool"]["should"].extend(
+            [{"match": {"insurance": e}} for e in search_params["insurance"]]
+        )
+
     if "gender" in search_params:
         query["bool"]["filter"].append({"term": {"gender": search_params["gender"][0]}})
-
-        query["bool"]["filter"].append(
-            {"term": {"insurance": search_params["gender"][0]}}
-        )
 
     final_query = {
         "function_score": {
             "query": query,
-            "functions": [{k: v} for k, v in config],
+            "functions": list(config["function_score"].values()),
             "boost_mode": "sum",
             "score_mode": "sum",
         }
@@ -94,10 +99,15 @@ def build_minimal_query(search_params, config=query_config):
     if "gender" in search_params:
         query["bool"]["filter"].append({"term": {"gender": search_params["gender"][0]}})
 
+    if "user-score" in search_params:
+        functions = [{"star": config["function_score"]["star"]}]
+    else:
+        functions = []
+
     final_query = {
         "function_score": {
             "query": query,
-            "functions": [{"star": config["function_score"]["star"]}],
+            "functions": functions,
             "boost_mode": "sum",
             "score_mode": "sum",
         }
@@ -125,8 +135,8 @@ def format_result(result, search_params) -> list[str]:
     for hits in result["hits"]["hits"]:
         name = hits["_source"]["title"]
         expertise = hits["_source"]["expertise"]
-        titel = name + "\n\n" + expertise
+        title = name + "\n\n" + expertise
         description = hits["_source"]
         lat_long = get_lat_long(hits, search_params.get("city", None))
-        formatted_result.append((titel, lat_long, description))
+        formatted_result.append((title, lat_long, description))
     return formatted_result

@@ -2,12 +2,12 @@ import html
 import json
 import os
 import re
+import time
 from urllib.parse import urlencode
 
 import pandas as pd
 import requests
 from tqdm import tqdm
-import time
 
 tqdm.pandas()
 DATASET_DIR = os.path.join(os.path.dirname(__file__), "../data/processed")
