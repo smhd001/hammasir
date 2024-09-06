@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 import sys
 
@@ -20,12 +21,63 @@ print(es.info())
 
 def search(search_params) -> list[str]:
     # result = dummy_query(search_params)
-    final_query = build_query(search_params, query_config)
+    config = configure_query(search_params, query_config)
+    final_query = build_minimal_query(search_params, config)
     result = es.search(index="doctors", body={"query": final_query})
     return format_result(result, search_params)
 
 
+def configure_query(search_params, default_config):
+    config = deepcopy(default_config)
+    function_scores = {}
+    for f_score, v in config["function_scores"].items():
+        if f_score in search_params:
+            function_scores[f_score] = v
+    config["function_scores"] = function_scores
+    # map gender
+    for gender, g_terms in config["gender_map"].value():
+        for g_term in g_terms:
+            if g_term in search_params["gender"][0]:
+                search_params["gender"][0] = gender
+
+
 def build_query(search_params, config=query_config):
+    query = {"bool": {"must": [], "should": [], "filter": []}}
+
+    for field in ["problem", "expertise"]:
+        if field in search_params:
+            query["bool"]["should"].extend(
+                [{"match": {"expertise": e}} for e in search_params[field]]
+            )
+
+    query["bool"]["should"].extend(
+        [{"match": {"neighborhood": e}} for e in search_params["neighborhood"]]
+    )
+
+    if "city" in search_params:
+        query["bool"]["filter"].append(
+            {"term": {"clinic.city": search_params["city"][0]}}
+        )
+    if "gender" in search_params:
+        query["bool"]["filter"].append({"term": {"gender": search_params["gender"][0]}})
+
+        query["bool"]["filter"].append(
+            {"term": {"insurance": search_params["gender"][0]}}
+        )
+
+    final_query = {
+        "function_score": {
+            "query": query,
+            "functions": [{k: v} for k, v in config],
+            "boost_mode": "sum",
+            "score_mode": "sum",
+        }
+    }
+
+    return final_query
+
+
+def build_minimal_query(search_params, config=query_config):
     query = {"bool": {"must": [], "should": [], "filter": []}}
 
     for field in ["problem", "expertise"]:
@@ -45,16 +97,7 @@ def build_query(search_params, config=query_config):
     final_query = {
         "function_score": {
             "query": query,
-            "functions": [
-                {
-                    "field_value_factor": {
-                        "field": "star",
-                        "factor": config["factors"]["star"],
-                        "modifier": "none",
-                        "missing": 0,
-                    }
-                },
-            ],
+            "functions": [{"star": config["function_score"]["star"]}],
             "boost_mode": "sum",
             "score_mode": "sum",
         }
