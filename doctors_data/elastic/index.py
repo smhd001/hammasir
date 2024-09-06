@@ -49,6 +49,7 @@ mappings = {
         },
         "url": {"type": "text", "index": False},
         "image": {"type": "text", "index": False},
+        "presence_freeturn": {"type": "date", "format": "epoch_second"},
     }
 }
 
@@ -149,6 +150,7 @@ def index(
             "clinic": row["clinic"],
             "url": row["url"],
             "image": row["image"],
+            "presence_freeturn": row["presence_freeturn"],
         }
         es.index(index="doctors", id=i, document=doc)
 
