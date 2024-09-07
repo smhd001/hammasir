@@ -21,7 +21,10 @@ from read_data import read_data, tags_list  # noqa: E402
 
 
 def get_model(model_id, freeze_base=False) -> tuple:
-    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    if "roberta" in model_id:
+        tokenizer = AutoTokenizer.from_pretrained(model_id, add_prefix_space=True)
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_id)
     id2label = {i: label for i, label in enumerate(tags_list)}
     label2id = {v: k for k, v in id2label.items()}
     model = AutoModelForTokenClassification.from_pretrained(
@@ -29,6 +32,7 @@ def get_model(model_id, freeze_base=False) -> tuple:
         num_labels=len(id2label),
         id2label=id2label,
         label2id=label2id,
+        ignore_mismatched_sizes=True,
     )
     for param in model.parameters():
         param.data = param.data.contiguous()
