@@ -152,7 +152,7 @@ def index(
             "image": row["image"],
             # look at https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html#_what_if_a_field_is_missing
             # https://github.com/elastic/elasticsearch/issues/7788 https://github.com/elastic/elasticsearch/issues/18892
-            "presence_freeturn": row["presence_freeturn"] if row["presence_freeturn"] else "0", 
+            "presence_freeturn": row["presence_freeturn"] if row["presence_freeturn"] else 0, 
         }
         es.index(index="doctors", id=i, document=doc)
 
