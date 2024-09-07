@@ -17,10 +17,19 @@ query_config = {
         "experience": {
             "field_value_factor": {
                 "field": "experience",
-                "factor": 0.2,
-                "modifier": "none",
+                "factor": 0.6,
+                "modifier": "log1p",
                 "missing": 0,
             }
+        },
+        "popularity": {
+            "field_value_factor": {
+                # maximum amount of views is about 300k which is about 5
+                "field": "number_of_visits",
+                "factor": 0.5,
+                "modifier": "log1p",
+                "missing": 1,
+            },
         },
         "amount-of-delay": {
             "gauss": {
