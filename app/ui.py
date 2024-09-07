@@ -54,7 +54,7 @@ if text:
 state.text_received
 
 st.html('<p style="direction:LTR">slots<p>')
-state.slots
+st.data_editor(state.slots)
 
 for res in state.search_result:
     title, lat_long, description = res
