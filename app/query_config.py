@@ -3,15 +3,13 @@ query_config = {
         "user-score": {
             "field_value_factor": {
                 "field": "star",
-                "factor": 5,
                 "modifier": "none",
                 "missing": 0,
             }
         },
         "moral": {
             "field_value_factor": {
-                "field": "doctor-encounter",
-                "factor": 5,
+                "field": "doctor_encounter",
                 "modifier": "none",
                 "missing": 0,
             }
@@ -19,30 +17,32 @@ query_config = {
         "experience": {
             "field_value_factor": {
                 "field": "experience",
-                "factor": 5,
+                "factor": 0.2,
                 "modifier": "none",
                 "missing": 0,
             }
         },
         "amount-of-delay": {
             "gauss": {
-                "waiting-time": {
+                "waiting_time": {
                     "origin": 0,
                     "scale": 1,
                     "offset": 0.5,
                     "decay": 0.5,
                 }
-            }
+            },
+            "weight": 5,
         },
         "first-available-appointment": {
             "gauss": {
-                "presence_freeturn": {
-                    "origin": "now",
+                "presence_freeturn": {  # TODO filter old ones
+                    "origin": "1724617800",  # crawl time
                     "scale": "1d",
                     "offset": "0d",
                     "decay": 0.5,
-                }
-            }
+                },
+            },
+            "weight": 5,
         },
     },
     "gender_map": {
