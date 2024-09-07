@@ -20,7 +20,7 @@ if module_path not in sys.path:
 from read_data import read_data, tags_list  # noqa: E402
 
 
-def get_model(model_id) -> tuple:
+def get_model(model_id, freeze_base=False) -> tuple:
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     id2label = {i: label for i, label in enumerate(tags_list)}
     label2id = {v: k for k, v in id2label.items()}
@@ -32,6 +32,10 @@ def get_model(model_id) -> tuple:
     )
     for param in model.parameters():
         param.data = param.data.contiguous()
+    if freeze_base:
+        for name, param in model.named_parameters():
+            if "bert" in name:
+                param.requires_grad = False
     return tokenizer, model
 
 
