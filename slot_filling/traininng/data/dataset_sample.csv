@@ -1,0 +1,6 @@
+من,کمرم,خیلی,درد,میکنه,یه,خانم,دکتر,در,محله,صیاد,پیشنهاد,بده,که,امتیازش,بالا,باشه,,,,,,,,,
+O,B-problem,O,I-problem,O,O,B-gender,O,O,O,B-neighborhood,O,O,O,O,B-user-score,O,O,O,O,O,O,O,O,O,O
+یه,دکتر,قلب,تو,تهران,معرفی,کن,که,بیمه,ارتش,رو,قبول,کنه,و,سریع,نوبت,بده,,,,,,,,,
+O,O,B-expertise,O,B-city,O,O,O,O,B-insuracen,O,O,O,O,B-first-free-appointment,O,O,O,O,O,O,O,O,O,O,O
+یه,دکتر,میخوام,آندوسکوپی,انجام,بده,در,مشهد,تو و,مطبش,معطل,نشم,,,,,,,,,,,,,,
+O,O,O,B-expertise,O,O,O,B-city,O,O,B-amount-of-delay,I-amount-of-delay,O,O,O,O,O,O,O,O,O,O,O,O,O,O
