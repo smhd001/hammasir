@@ -14,7 +14,7 @@ services:
       - DOCKER_CONTAINER=Yes  # Environment variable from docker run
     volumes:
       - "${MODEL_PATH}:/model"  # Mount model from the docker run command
-      - ~/.cached/huggingface:~/.cached/huggingface
+      - ~/.cache/huggingface:/root/.cache/huggingface
     deploy:
       resources:
         reservations:
