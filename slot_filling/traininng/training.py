@@ -71,10 +71,11 @@ def tokenize_and_align_labels(examples, tokenizer):
     return tokenized_inputs
 
 
-def get_dataset(file_path, tokenizer, test_size=0.2) -> DatasetDict:
-    data = read_data(file_path)
-    sample = Dataset.from_list(
-        data,
+def get_dataset(train_path, test_path, tokenizer, test_size=0.2) -> DatasetDict:
+    train_data = read_data(train_path)
+    test_data = read_data(test_path)
+    train_dataset = Dataset.from_list(
+        train_data,
         features=Features(
             {
                 "id": Value("int32"),
@@ -84,8 +85,19 @@ def get_dataset(file_path, tokenizer, test_size=0.2) -> DatasetDict:
         ),
         split=NamedSplit("train"),
     )
-    sample = sample.train_test_split(test_size=test_size)
-    tokenized_data = sample.map(
+    test_dataset = Dataset.from_list(
+        test_data,
+        features=Features(
+            {
+                "id": Value("int32"),
+                "tokens": Sequence(Value("string")),
+                "tags": Sequence(ClassLabel(names=tags_list)),
+            }
+        ),
+        split=NamedSplit("test"),
+    )
+    dataset = DatasetDict({"train": train_dataset, "test": test_dataset})
+    tokenized_data = dataset.map(
         tokenize_and_align_labels, batched=True, fn_kwargs={"tokenizer": tokenizer}
     )
     return tokenized_data
