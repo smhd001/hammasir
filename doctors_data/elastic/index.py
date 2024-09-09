@@ -64,8 +64,7 @@ persian_index_analyzer = {
         "decimal_digit",
         "arabic_normalization",
         "persian_normalization",
-        "remove_suffix_m",
-        "remove_suffix_am",
+        "remove_suffix_m_or_am",
     ],
 }
 persian_search_analyzer = deepcopy(persian_index_analyzer)
@@ -74,9 +73,11 @@ persian_search_analyzer["filter"].append("synonyms")
 # e.g in تب و لرز, مالاریا
 # see https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-synonym-graph-tokenfilter.html#_stop_token_filter_before_synonym_token_filter_2
 # stop word also should be before stemmer other wise some additional words would be deleted
-# e.g : بینی -> بین 
-persian_index_analyzer["filter"].extent(["persian_stop", "persian_stemmer"])
-persian_search_analyzer["filter"].extent(["persian_stop", "persian_stemmer"])
+# e.g : بینی -> بین
+persian_index_analyzer["filter"].extend(["persian_stop", "persian_stemmer"])
+persian_search_analyzer["filter"].extend(["persian_stop", "persian_stemmer"])
+MIM = "م"
+ALEPH = "ا"
 
 settings = {
     "analysis": {
@@ -89,14 +90,13 @@ settings = {
         "filter": {
             "persian_stop": {"type": "stop", "stopwords": "_persian_"},
             "persian_stemmer": {"type": "stemmer", "language": "persian"},
-            "remove_suffix_m": {
+            "remove_suffix_m_or_am": { # چشام دستم
                 "type": "pattern_replace",
-                "pattern": "م$",
-                "replacement": "",
-            },
-            "remove_suffix_am": { # چشام؛ 
-                "type": "pattern_replace",
-                "pattern": "ام$",
+                "pattern": "(?<=.{3})"
+                + f"{ALEPH}{MIM}$"
+                + "|"
+                + "(?<=.{2})"
+                + f"{MIM}$",
                 "replacement": "",
             },
             "synonyms": {
