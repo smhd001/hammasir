@@ -177,7 +177,7 @@ def get_data(path):
     data["symptomes"] = data["symptomes"].apply(safe_literal_eval)
     data = data.replace(np.nan, None)
     about = about.replace(np.nan, None)
-    data["about"] = about["about"]
+    data = pd.merge(data, about, on="medical_code")
     return data
 
 
