@@ -164,6 +164,7 @@ def index(
             if row["presence_freeturn"]
             else 0,
             "about": row["about"],
+            "symptomes": row["symptomes"],
         }
         es.index(index="doctors", id=i, document=doc)
 
@@ -173,6 +174,7 @@ def get_data(path):
     about = pd.read_csv(path + "about_dataset.csv")
     data["clinic"] = data["clinic"].apply(safe_literal_eval)
     data["insurances"] = data["insurances"].apply(safe_literal_eval)
+    data["symptomes"] = data["symptomes"].apply(safe_literal_eval)
     data = data.replace(np.nan, None)
     about = about.replace(np.nan, None)
     data["about"] = about["about"]

@@ -7,7 +7,7 @@ from transformers import AutoTokenizer, pipeline
 if "DOCKER_CONTAINER" in os.environ:
     model_path = "/model"
 else:
-    model_path = "../slot_filling/traininng/sf_model/checkpoint-112"
+    model_path = "../slot_filling/training/sf_model/checkpoint-112"
 
 model = ORTModelForTokenClassification.from_pretrained(
     model_path,

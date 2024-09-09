@@ -1,5 +1,3 @@
-# model path should be env 
-# docker run -it --rm --gpus all -v /home/ham/hammasir/hammasir/slot_filling/traininng/ner_model/checkpoint-77:/model --net=host -e DOCKER_CONTAINER=Yes  app
 version: '3.8'  # 3.8 is needed for GPU support in docker-compose
 services:
   main_app:
