@@ -51,8 +51,12 @@ def build_query(search_params, config=query_config):
     for field in ["problem", "expertise"]:
         if field in search_params:
             problem_expertise_query["bool"]["should"].extend(
-                [{"match": {"expertise": e}} for e in search_params[field]]
+                [
+                    {"match": {"expertise": e, "fuzziness": 2}}
+                    for e in search_params[field]
+                ]
             )
+    # (problem or experties) mus match
     query["bool"]["must"].append(problem_expertise_query)
 
     if "neighborhood" in search_params:
@@ -76,16 +80,18 @@ def build_query(search_params, config=query_config):
     if "first-available-appointment" in search_params:
         query["bool"]["must_not"].append({"term": {"presence_freeturn": 0}})
 
-    final_query = {
-        "function_score": {
-            "query": query,
-            "functions": list(config["function_score"].values()),
-            "boost_mode": "sum",
-            "score_mode": "sum",
-        }
-    }
-
-    return final_query
+    query["bool"]["should"].extend(
+        [
+            {
+                "function_score": {
+                    "functions": [f, {"weight": 5}],
+                    "score_mode": "min",
+                }
+            }
+            for f in list(config["function_score"].values())
+        ]
+    )
+    return query
 
 
 def unrestricted_query(search_params, config=query_config):
@@ -94,7 +100,10 @@ def unrestricted_query(search_params, config=query_config):
     for field in ["problem", "expertise"]:
         if field in search_params:
             query["bool"]["should"].extend(
-                [{"match": {"expertise": e}} for e in search_params[field]]
+                [
+                    {"match": {"expertise": e, "fuzziness": 2}}
+                    for e in search_params[field]
+                ]
             )
 
     if "neighborhood" in search_params:
@@ -133,7 +142,10 @@ def build_minimal_query(search_params, config=query_config):
     for field in ["problem", "expertise"]:
         if field in search_params:
             query["bool"]["should"].extend(
-                [{"match": {"expertise": e}} for e in search_params[field]]
+                [
+                    {"match": {"expertise": e, "fuzziness": 2}}
+                    for e in search_params[field]
+                ]
             )
 
     if "city" in search_params:

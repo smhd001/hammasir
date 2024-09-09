@@ -58,7 +58,6 @@ for i in range(START,NUM_PARTITIONS):
     partition["about"] = partition["medical_code"].progress_apply(get_about)
     partition[["about"]].to_csv(DATASET_DIR + f"/about_dataset_{i}.csv")
 
-NUM_PARTITIONS = 10
 about = pd.concat(
     [
         pd.read_csv(DATASET_DIR + f"/about_dataset_{i}.csv", index_col=0)
