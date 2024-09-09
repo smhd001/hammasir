@@ -172,7 +172,7 @@ def get_data(path):
     data = pd.read_csv(path + "base_dataset.csv")
     about = pd.read_csv(path + "about_dataset.csv")
     data["clinic"] = data["clinic"].apply(safe_literal_eval)
-    # data["insurances"] = data["insurances"].apply(safe_literal_eval) TODO
+    data["insurances"] = data["insurances"].apply(safe_literal_eval)
     data = data.replace(np.nan, None)
     about = about.replace(np.nan, None)
     data["about"] = about["about"]

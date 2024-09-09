@@ -70,8 +70,8 @@ def build_query(search_params, config=query_config):
         )
 
     if "insurance" in search_params:
-        query["bool"]["should"].extend(
-            [{"match": {"insurance": e}} for e in search_params["insurance"]]
+        query["bool"]["filter"].extend(
+            [{"match": {"insurances": e}} for e in search_params["insurance"]]
         )
 
     if "gender" in search_params:
