@@ -7,7 +7,6 @@ doctors_data = []
 expertise_list = []
 city_list = []
 
-
 def get_json(city, expertise):
     for num in range(1, 26):
         url = f"https://apigw.paziresh24.com/v1/search/{city}/{expertise}/?page={num}"
@@ -20,7 +19,8 @@ def get_json(city, expertise):
             # Check if the response status is 200 (OK)
             if response.status_code != 200:
                 print(f"Failed to fetch data: {response.status_code}")
-                return
+                time.sleep(2 * i)
+                continue
         
             # Try to decode the response as JSON
             try:
@@ -32,6 +32,7 @@ def get_json(city, expertise):
                 print(f"Response content: {response.text}")  # Optional: print the response content
                 time.sleep(1)
             except requests.exceptions.ConnectionError:
+                print("Connection error")
                 counter += 1
                 time.sleep(2 * i)
         
@@ -47,7 +48,8 @@ def get_json(city, expertise):
                 doctor["city"] = city
             doctors_data.extend(result)
         else:
-            continue
+            print("No data found")
+            return
 
 def get_expertise():
     url = "https://www.paziresh24.com/s/"
@@ -88,9 +90,8 @@ city_list = ["tehran", "mashhad", "karaj", "ardabil", "bushehr", "shahrekord", "
              "khorramabad", "arak", "sari", "bojnurd", "qazvin", "qom", "semnan", "zahedan", "birjand", "orumieh",
              "yazd", "zanjan"]
 
-# get_all_data(city_list, expertise_list)
-for city in city_list:
-    get_all_data([city], expertise_list)
 
-    with open(f"../data/raw/{city}.json", "w", encoding="utf-8") as file:
-        json.dump(doctors_data, file, ensure_ascii=False)
+get_all_data(city_list, expertise_list)
+
+with open("../data/raw/new_doctors.json", "w", encoding="utf-8") as file:
+    json.dump(doctors_data, file, ensure_ascii=False)
