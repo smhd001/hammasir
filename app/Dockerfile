@@ -5,9 +5,9 @@ RUN apt-get update &&\
 
 WORKDIR app
 
-COPY requirment.txt .
+COPY requirement.txt .
 
-RUN pip install -r requirment.txt
+RUN pip install -r requirement.txt
 
 COPY . .
 
