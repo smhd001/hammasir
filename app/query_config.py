@@ -26,10 +26,10 @@ query_config = {
             "field_value_factor": {
                 # maximum amount of views is about 300k which is about 5
                 "field": "number_of_visits",
-                "factor": 0.5,
                 "modifier": "log1p",
                 "missing": 1,
             },
+            "weight": 0.5,
         },
         "amount-of-delay": {
             "gauss": {
@@ -61,5 +61,9 @@ query_config = {
     "boosts": {
         "expertise": 1.5,
         "problem": 1,
+        ("problem", "symptomes"): 0.5,
+        ("problem", "about"): 0.1,
+        ("expertise", "about"): 0.2,
+        ("expertise", "symptomes"): 0.1,
     },
 }

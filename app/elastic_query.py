@@ -47,34 +47,66 @@ def configure_query(search_params, default_config):
 def build_query(search_params, config=query_config):
     query = {"bool": {"must": [], "must_not": [], "should": [], "filter": []}}
 
-    # between problem and expertise at least one should match 
+    # between problem and expertise at least one should match
     problem_expertise_filter = []
 
-    for field in ["problem", "expertise"]:
-        if field in search_params:
+    for search_p in ["problem", "expertise"]:
+        if search_p in search_params:
             query["bool"]["should"].extend(
                 [
                     bound_query(
                         query={
                             "match": {
-                                f"expertise^{config["boosts"][field]}": {
+                                "expertise": {
                                     "query": e,
                                     "fuzziness": 1,
+                                    "boost": config["boosts"][search_p],
                                 }
                             }
                         }
                     )
-                    for e in search_params[field]
+                    for e in search_params[search_p]
                 ]
             )
             problem_expertise_filter.extend(
                 [
                     {"match": {"expertise": {"query": e, "fuzziness": 1}}}
-                    for e in search_params[field]
+                    for e in search_params[search_p]
                 ]
             )
 
-    query["bool"]["filter"].extend(problem_expertise_filter)
+    for term, search_in in [
+        ("problem", "symptomes"),
+        ("problem", "about"),
+        ("expertise", "symptomes"),
+        ("expertise", "about"),
+    ]:
+        if term in search_params:
+            query["bool"]["should"].extend(
+                [
+                    bound_query(
+                        query={
+                            "match": {
+                                search_in: {
+                                    "query": e,
+                                    "fuzziness": 1,
+                                    "boost": config["boosts"][(term, search_in)],
+                                }
+                            }
+                        }
+                    )
+                    for e in search_params[term]
+                ]
+            )
+            print(search_in)
+            problem_expertise_filter.extend(
+                [
+                    {"match": {search_in: {"query": e, "fuzziness": 1}}}
+                    for e in search_params[term]
+                ]
+            )
+
+    query["bool"]["filter"].append(({"bool": {"should": problem_expertise_filter}}))
 
     if "neighborhood" in search_params:
         query["bool"]["filter"].extend(
