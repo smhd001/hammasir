@@ -9,6 +9,8 @@ COPY requirment.txt .
 
 RUN pip install -r requirment.txt
 
+RUN pip install hazm
+
 COPY . .
 
 ENTRYPOINT streamlit run ui.py
