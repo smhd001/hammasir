@@ -115,7 +115,7 @@ def build_query(search_params, config=query_config):
 
     if "city" in search_params:
         query["bool"]["filter"].append(
-            {"term": {"clinic.city": search_params["city"][0]}}
+            {"match": {"clinic.city": search_params["city"][0]}}
         )
 
     if "insurance" in search_params:
@@ -179,7 +179,7 @@ def build_query_v1(search_params, config=query_config):
 
     if "city" in search_params:
         query["bool"]["filter"].append(
-            {"term": {"clinic.city": search_params["city"][0]}}
+            {"match": {"clinic.city": search_params["city"][0]}}
         )
 
     if "insurance" in search_params:
