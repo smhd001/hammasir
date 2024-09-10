@@ -44,6 +44,21 @@ Key Functions
         Uses a transformer-based NER model to extract entities from text.
         Returns a dictionary where each key corresponds to a slot type and the values are lists of extracted entities.
 
+Tags List
+
+    Problem: The illness or medical service the user requires.
+    Expertise: The specific medical expertise or specialization the user is seeking in a doctor.
+    City: The city in which the user wants to find a doctor.
+    Gender: The gender of the doctor preferred by the user.
+    Neighborhood: The neighborhood where the doctor's clinic is located.
+    Online-or-In-Person: The availability of online appointments versus in-person visits.
+    Insurance: The types of insurance accepted by the doctor.
+    First-Available-Appointment: The earliest possible time for the user to see the doctor.
+    Amount-of-Delay: The expected waiting time at the clinic.
+    Moral: The doctor’s level of respectfulness and manners.
+    User-Score: The rating or score given to the doctor by users.
+    Experience: The number of years the doctor has been practicing.
+
 Dependencies
 
     Transformers: Used for the NER model and tokenizer.
