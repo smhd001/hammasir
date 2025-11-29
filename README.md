@@ -1,6 +1,7 @@
 # Doctor search
 
 This project aims to search and suggest doctors base on the user input (voice or text)
+
 For example, you can search for `The best internal medicine doctor with short waiting time` and get results.
 
 ### data source
